@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C/C++ for students</title>
+
+    <script src="../codemirror-5.65.12/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="../../codemirror-5.65.12/lib/codemirror.css">
+    <script src="../../codemirror-5.65.12/mode/python/python.js"></script>
+    <script src="../../codemirror-5.65.12/mode/clike/clike.js"></script>
+    <link rel="stylesheet" href="../../codemirror-5.65.12/theme/dracula.css">
+    <script src="../../codemirror-5.65.12/addon/edit/closebrackets.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <div class="topnav">
+    <a class="active" href="/user/<%= dataId%>">Home</a>
+     <a href="/">Logout</a>
+  </div>
+  <div style="display: flex; flex-direction: row">
+    <div style="padding: 15px;">
+      <select class="form-select" id="selectExam" style="width: 300px">
+          <option selected value=""> Select Exam...</option>
+          <% for (let i = 0; i < dataExam.length; i++) { %>
+          <option value="<%= dataExam[i].idTest%>"><%= dataExam[i].nameTest%></option>
+          <% } %>
+      </select>
+    </div>
+    <div class="detailExamUser">
+      <textarea disabled name="exam" id="detailIdExam" class="tArea" rows="1" style="width: 100px; height:40px;" >ID of Exam</textarea>
+    </div>   
+    <form action="/user/<%= dataId%>/table-score" id="startExam" style="padding: 15px;" method="GET">
+      <button type="submit" id="scoreT" class="btn btn-success">Score table</button>
+    </form>
+  </div>
+  <div class="detailExamUser">
+    <textarea disabled name="exam" id="detailExam" class="tArea" rows="9" >Detail of Exam</textarea>
+  </div>
+  
+  <form class="col">
+  </form>
+  <div class="row m-3">
+    <div class="col">
+        <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
+            <div class="col-12 w-25">
+              <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+              <select class="form-select" id="inlineFormSelectPref">
+                  <option selected>Language</option>
+                  <option value="Cpp">Cpp</option>
+                  <option value="Java">Java</option>
+                  <option value="Python">Python</option>
+              </select>
+            </div>
+            <div>
+              <button type="button" id="sub" class="btn btn-success">Submit</i></button>
+              <button type="button" id="run" class="btn btn-success">Run <i class="bi bi-play-fill"></i></button>
+            </div>
+        </div>
+        <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
+    </div>
+    <div class="col d-flex flex-column rounded bg-dark px-4">
+      <div class="h-50">
+        <label for="Input" class="text-light mt-4 mb-2">Input</label>
+        <textarea type="text" id="input" class="form-control h-75" aria-label="Last name"></textarea>
+      </div>
+      <div class="h-50">
+        <label for="Output" class="text-light mb-2">Output</label>
+        <textarea type="text" id="output" class="form-control h-75" aria-label="Last name"></textarea>
+      </div>
+    </div>
+  </div>
+</body>
+<script>  
+
+    var code;
+    var dataCode;
+
+    var optionExam = document.getElementById("selectExam")
+
+    const testId = JSON.parse('<%- JSON.stringify(testId) %>') 
+    const testInput = JSON.parse('<%- JSON.stringify(testInput) %>')
+    const testOutput = JSON.parse('<%- JSON.stringify(testOutput) %>')
+
+    const examId = JSON.parse('<%- JSON.stringify(examId) %>') //
+
+    const detailExam = JSON.parse('<%- JSON.stringify(detailExam) %>')
+
+    var idT;
+
+    optionExam?.addEventListener("change", function() {
+      idT = optionExam.value
+      document.getElementById("detailIdExam").value = idT; //set id of Exam
+      for (let i = 0; i< Object.keys(examId).length; i++) {
+        if (examId[i] == idT) {
+          document.getElementById("detailExam").value = detailExam[i]; //set detail of Exam
+        }
+      }
+    })
+
+
+ 
+
+
+    var editor=CodeMirror.fromTextArea(document.getElementById("editor"), {
+        mode: "text/x-c++src",
+        theme: "dracula",
+        lineNumbers: true,
+        autoCloseBracket: true,
+
+    })
+
+
+
+    var width=window.innerWidth
+    var input = document.getElementById("input")
+    var output = document.getElementById("output")
+    var run = document.getElementById("run")
+    var sub = document.getElementById("sub")
+    
+    editor.setSize(0.7*width, "500")
+    var option=document.getElementById("inlineFormSelectPref")
+    option?.addEventListener("change", function(){
+      if(option.value == "Java"){
+        editor.setOption("mode", "text/x-java")
+      }
+      else if(option.value == "Python"){
+        editor.setOption("mode", "text/x-python")
+      }
+      else{
+        editor.setOption("mode", "text/x-c++src")
+      }
+    })
+
+    
+
+    sub.addEventListener("click", async function(){ //score
+      var count = 0;
+      var countP = 0; //point = countP/count
+      for (let i = 0; i< Object.keys(testId).length; i++){
+        if (testId[i] == idT){
+          count++;
+          code = {
+            code: editor.getValue(),
+            input: testInput[i],
+            lang: option.value
+          }
+          console.log(code.input)
+    
+          var oData = await fetch("http://localhost:5000/compile", {
+            method: "POST",
+            headers:{
+              "Content-Type": "application/json"
+            },
+            body:JSON.stringify(code)
+          })
+          
+          var d = await oData.json()
+          if (d.output == testOutput[i]) countP++;
+        }
+      }
+      var point = (countP/count)*10;
+      dataCode = { 
+        idExam: idT,
+        idUser: '<%= dataId%>',
+        point: point  }
+
+      await fetch("http://localhost:5000/save-point", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dataCode)
+      })
+      alert("Your score is " + point)
+    })
+
+    run.addEventListener("click", async function(){
+      code = {
+        code: editor.getValue(),
+        input: input.value,
+        lang: option.value
+      }
+      console.log(code.input)
+      var oData = await fetch("http://localhost:5000/compile", {
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify(code)
+      })
+      var d = await oData.json()
+      output.value = d.output
+    })
+</script>
+</html>
