@@ -1,0 +1,247 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C/C++ for Students</title>
+    <link rel="stylesheet" href="/codemirror-5.65.12/lib/codemirror.css">
+    <script src="/codemirror-5.65.12/lib/codemirror.js"></script>
+    <script src="/codemirror-5.65.12/mode/python/python.js"></script>
+    <script src="/codemirror-5.65.12/mode/clike/clike.js"></script>
+    <link rel="stylesheet" href="/codemirror-5.65.12/theme/dracula.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="shortcut icon" href="/image/logoWeb.png" type="image/png">
+
+
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="/">Home</a>
+        <a href="/student/<%= idUser %>/profile">Profile</a>
+        <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) handleLogout(); return cf">Logout</a>
+    </div>
+    <div class="w3-container">
+        <div>
+            <h1><%= detail.className %></h1>
+            <div class="header-detail">
+                <a class="h-active" href="/student/<%= idUser %>/detail-class/<%= detail.idClass %>">Exam</a>
+                <a href="/student/<%= idUser %>/detail-class/<%= detail.idClass %>/members">Members</a>
+                <a onclick="test();">Test</a>
+            </div>
+            <div class="add">
+                <button type="button" onclick="leaveClass();">Leave Class</button>
+            </div>
+            <h2><%= data.nameTest %></h2>
+            <h3>Language Allow: <%= data.languageAllow %></h3>
+            <textarea disabled name="exam" id="detailExam" class="tArea" rows="9" cols="160" style="margin-left: 15px;"><%= data.detail %></textarea>
+        </div>
+    </div>
+    <div class="row m-3">
+        <div class="col">
+            <div class="d-flex justify-content-between mb-2 bg-dark rounded p-2">
+                <div class="col-12 w-25">
+                  <label class="visually-hidden" for="autoSizingSelect">Preference</label>
+                  <select class="form-select" id="inlineFormSelectPref">
+                      <option selected>Language</option>
+                      <option value="Cpp">Cpp</option>
+                      <option value="Java">Java</option>
+                      <option value="Python">Python</option>
+                  </select>
+                </div>
+                <div>
+                  <button type="button" id="sub" class="btn btn-success">Submit</i></button>
+                  <button type="button" id="run" class="btn btn-success">Run <i class="bi bi-play-fill"></i></button>
+                </div>
+            </div>
+            <textarea type="text" id="editor" class="form-control" aria-label="First name"></textarea>
+        </div>
+        <div class="col d-flex flex-column rounded bg-dark px-4">
+          <div class="h-50">
+            <label for="Input" class="text-light mt-4 mb-2">Input</label>
+            <textarea type="text" id="input" class="form-control h-75" aria-label="Last name"></textarea>
+          </div>
+          <div class="h-50">
+            <label for="Output" class="text-light mb-2">Output</label>
+            <textarea type="text" id="output" class="form-control h-75" aria-label="Last name"></textarea>
+          </div>
+        </div>
+      </div>
+</body>
+<script>
+  function handleLogout() {
+    localStorage.removeItem('jwt')
+    localStorage.removeItem('countdownDuration');
+    localStorage.removeItem('countdownEndTime');
+    localStorage.removeItem('detailTest');
+    localStorage.removeItem('image');
+  }
+
+    async function leaveClass() {
+      if (confirm('Confirm leave class')) {
+        var req = await fetch("http://localhost:5000/leave-class", {
+            method: "POST",
+            headers: {
+                "Content-type" : "application/json"
+            },
+            body: JSON.stringify({
+                idUser: '<%= idUser %>',
+                idClass: '<%= detail.idClass %>'
+            })
+        })
+
+        var result = await req.json();
+        if (result == "successfully leave class") {
+            window.location = "http://localhost:5000/"
+        } else {
+            alert(result)
+        }
+      }
+    }
+
+    async function test() {
+      var req = await fetch("http://localhost:5000/student/test", {
+        method: "post",
+        headers: {
+          "Content-type" : "application/json"
+        },
+        body: JSON.stringify({
+          idUser: '<%= idUser %>',
+          idClass: '<%= detail.idClass %>'
+        })
+      })
+
+      var result = await req.json();
+      if (result == 'Test available') {
+        if (confirm(result + ". Confirm start the test.")) {
+          window.location = "http://localhost:5000/student/<%= idUser %>/detail-class/<%= detail.idClass %>/test"
+        }
+      } else {
+        alert(result)
+      }
+    }
+
+    var editor=CodeMirror.fromTextArea(document.getElementById("editor"), {
+        mode: "text/x-c++src",
+        theme: "dracula",
+        lineNumbers: true,
+        autoCloseBracket: true,
+
+    })
+    var width=window.innerWidth
+    var input = document.getElementById("input")
+    var output = document.getElementById("output")
+    var sub = document.getElementById("sub")
+    var run = document.getElementById("run")
+    editor.setSize(0.7*width, "500")
+    var option=document.getElementById("inlineFormSelectPref")
+    option?.addEventListener("change", function(){
+      if(option.value == "Java"){
+        editor.setOption("mode", "text/x-java")
+      }
+      else if(option.value == "Python"){
+        editor.setOption("mode", "text/x-python")
+      }
+      else{
+        editor.setOption("mode", "text/x-c++src")
+      }
+    })
+    var code;
+    var dataCode;
+
+    var arrTest_case = arrayToUse = JSON.parse('<%- JSON.stringify(arrTest_case)%>')
+
+    sub.addEventListener("click", async function(){ //score
+
+        var languageAllow = '<%= data.languageAllow %>'
+
+        if(option.value == 'Language' || !languageAllow.includes(option.value)) {
+          alert('Please select programming language: ' + languageAllow);
+        }
+        else {
+          let cf = confirm('Confirm submit');
+          
+          if (cf == true){
+            const start = Date.now();
+            var count = 0;
+            for (let i = 0; i < arrTest_case.length; i++){
+                code = {
+                  code: editor.getValue(),
+                  input: arrTest_case[i].input,
+                  lang: option.value
+                }
+                console.log(code.input)
+          
+                var oData = await fetch("http://localhost:5000/compile", {
+                  method: "POST",
+                  headers:{
+                    "Content-Type": "application/json"
+                  },
+                  body:JSON.stringify(code)
+                })
+                
+                var d = await oData.json()
+                if (d.output == arrTest_case[i].output) count++;
+            }
+            var point = (count/arrTest_case.length)*10;
+            
+            const millis = Date.now() - start;
+            dataCode = { 
+              idExam: '<%= data.idTest %>',
+              idUser: '<%= idUser%>',
+              point: point,
+              runtime: Math.floor(millis / 1000)  }
+  
+            await fetch("http://localhost:5000/save-point", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(dataCode)
+            })
+            alert("Your score is " + point + "\n" + `Time: ${Math.floor(millis / 1000)}ms`)
+          }
+  
+        }
+        
+       
+        
+      })
+  
+
+    run.addEventListener("click", async function(){
+      code = {
+        code: editor.getValue(),
+        input: input.value,
+        lang: option.value
+      }
+
+      var oData = await fetch("http://localhost:5000/compile", {
+        method: "POST",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify(code)
+      })
+      var d = await oData.json()
+      output.value = d.output
+    })
+
+    function search() {
+      var searchValue = document.getElementById('search-text').value.toLowerCase();
+      var tableRows = document.querySelectorAll('.w3-table-all tbody tr');
+
+      tableRows.forEach(function (row) {
+          var fullName = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+          // Hiển thị hoặc ẩn dòng tùy thuộc vào việc tên đầy đủ khớp với từ khóa tìm kiếm
+          row.style.display = fullName.includes(searchValue) ? 'table-row' : 'none';
+      });
+    }
+</script>
+</html>

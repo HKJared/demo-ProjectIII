@@ -4,14 +4,19 @@ const configViewEngine = require('./config/viewEngine');
 const initWebRoute = require('./router/web');
 const initApiRoute = require('./router/api');
 const homeController = require('./controller/homeController');
+const path = require('path');
 
 const app = express();
 const bodyP=require("body-parser");
 const compiler=require("compilex");
 const options={stats: true };
 
+app.use('/public', express.static(path.join(__dirname, 'src', 'public')));
+
 app.use(express.urlencoded({    extended: true  }));
 app.use(express.json());
+
+const port = process.env.PORT || 5000;
 
 // setup view engine
 configViewEngine(app);
@@ -30,9 +35,11 @@ compiler.init(options);
 
 
 app.use(bodyP.json())
-app.use("/codemirror-5.65.12", express.static("D:/Workspaces/Project II/codemirror-5.65.12"))
+app.use("/codemirror-5.65.12", express.static("D:/Workspaces/Project III/codemirror-5.65.12"))
 
 app.get("/", homeController.getHomepage);
+
+app.get("/home/:token", homeController.checkRole);
 
 app.get("/login", homeController.getLoginPage);
 
@@ -40,33 +47,95 @@ app.get("/signup", homeController.getSignupPage);
 
 app.post("/create-new-user", homeController.createNewUser);
 
-app.post("/check-login", homeController.checkLogin);
+app.post("/check-login", homeController.login);
 
 app.get("/user/:idUser", homeController.getUserPage);
 
-app.get("/admin", homeController.getAdminPage);
+app.post("/create-class", homeController.createClass);
 
-app.get("/exam", homeController.getExamPage);
+app.post("/delete-class/:idClass", homeController.deleteClass);
 
-app.get("/detail/exam/:idExam", homeController.getDetailExam);
+app.get("/detail-class/:idClass", homeController.detailClass);
 
-app.get("/detail/user/:idUser", homeController.getDetailUser);
+app.post("/add-students-to-class", homeController.addStudents);
+
+app.post("/remove-student", homeController.removeStudent);
+
+app.get("/detail-class/:idClass/exam", homeController.getExamPage);
+
+app.get("/detail-class/:idClass/detail-exam/:idExam", homeController.getDetailExam);
+
+app.get("/detail-class/:idClass/detail-user/:idUser", homeController.getDetailUser);
 
 app.post("/upload-user/:idUser", homeController.uploadUser);
 
 app.post("/delete-user", homeController.deleteUser);
 
+app.post('/join-class', homeController.joinClass);
+
+app.get('/student/:idUser/detail-class/:idClass', homeController.detailClassStudent);
+
+app.get('/student/:idUser/detail-class/:idClass/members', homeController.membersClassStudent);
+
+app.get('/student/:idUser/detail-class/:idClass/exam/:idTest', homeController.examStudent);
+
+app.get('/student/:idUser/detail-class/:idClass/test', homeController.testStudent);
+
+app.post('/student/test', homeController.checkTest);
+
+app.get('/student/test/get-data/:idClass', homeController.getDataTest);
+
+app.post('/submit', homeController.submit);
+
+app.post('/leave-class', homeController.leaveClass);
+
 app.post("/delete-exam", homeController.deleteExam);
 
-app.get("/creat-exam", homeController.getCreateNewExamPage);
+app.get("/detail-class/:idClass/create-exam", homeController.getCreateNewExamPage);
 
 app.post("/add-exam", homeController.addExam);
+
+app.get('/detail-class/:idClass/test/create', homeController.getCreateTest);
+
+app.post('/create-test', homeController.createTest);
+
+app.get('/detail-class/:idClass/test/submission', homeController.getSubmission);
+
+app.post('/grade/:idClass', homeController.grade);
 
 app.post("/save-point", homeController.savePoint);
 
 app.get("/user/:idUser/table-score", homeController.getTableScorePage);
 
-app.post("/admin/search", homeController.getSearchPage);
+app.get("/admin/classes", homeController.adminClasses);
+
+app.get("/user/:idUser/test", homeController.getTestPage);
+
+app.post("/save-code", homeController.saveCode);
+
+app.get("/detail-class/:idClass/test", homeController.adminTest);
+
+app.get("/:role/:idUser/profile", homeController.profileUser);
+
+app.post("/change-password", homeController.changePassword);
+
+app.post("/admin/delete-class/:idClass", homeController.deleteClass);
+
+app.post("/admin/replace-lecturer/:idClass", homeController.replaceLecturer);
+
+app.get("/admin/lecturers", homeController.LecturersPage);
+
+app.get("/admin/students", homeController.StudentsPage);
+
+app.get("/admin/:role/:idUser", homeController.detailUser);
+
+app.post("/admin/delete-user/:idUser", homeController.deleteUser);
+
+app.get("/admin/new-lecturer", homeController.newLecturerPage);
+
+app.post("/admin/new-lecturer", homeController.newLecturer);
+
+app.post("/admin/update-user/:idUser", homeController.uploadUser)
 
 app.post("/compile", function (req, res) {
     var code = req.body.code
@@ -156,4 +225,7 @@ app.post("/compile", function (req, res) {
     }
 })
 
-app.listen(5000)
+app.listen(5000, function(err) {
+    if(err) console.log("Error in server setup");
+    console.log('Server listening on PORT: ',port)
+})

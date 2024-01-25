@@ -14,19 +14,20 @@
     />
     <title>Sign up</title>
     <link rel="stylesheet" href="css/signup.css" />
+    <link rel="shortcut icon" href="/image/logoWeb.png" type="image/png">
   </head>
   <body>
     <div class="signup">
       <h1 class="signup-heading">Sign up</h1>
-      <form action="/create-new-user" class="signup-form" autocomplete="off" method="POST">
+      <form action="" class="signup-form" autocomplete="off" method="POST">
         <label for="fullname" class="signup-label">Fullname</label>
-        <input type="text" name="fullname" class="signup-input" placeholder="">
+        <input type="text" id="fullname" class="signup-input" placeholder="">
         <label for="account" class="signup-label">Account</label>
-        <input type="text" name="account" class="signup-input" placeholder="">
+        <input type="text" id="account" class="signup-input" placeholder="">
         <label for="password" class="signup-label">Password</label>
-        <input type="password" name="password" class="signup-input" placeholder="">
+        <input type="password" id="password" class="signup-input" placeholder="">
 
-        <button type="submit" class="signup-submit">Sign up</button>
+        <button type="button" onclick="signup()" class="signup-submit">Sign up</button>
       </form>
       <p class="signup-already">
         <span>Already have an account.  </span>
@@ -34,4 +35,30 @@
       </p>
     </div>
   </body>
+  <script>
+    var fullname = document.getElementById("fullname");
+    var account = document.getElementById("account");
+    var password = document.getElementById("password");
+
+    var user
+    async function signup() {
+        user = {
+            fullname: fullname.value,
+            account: account.value,
+            password: password.value
+        }
+        var respone = await fetch("http://localhost:5000/create-new-user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+        var result = await respone.json();
+        alert(result);
+        if (result == 'Account successfully created') {
+            window.location = "http://localhost:5000/login"
+        }
+    }
+  </script>
 </html>

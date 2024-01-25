@@ -39,8 +39,40 @@ body {
 
   }
 
-  .w3-container h2 {
+  .w3-container h1 {
     color: #ffffff;
+  }
+
+  .w3-container h2, .w3-container h3 {
+    color: #ffffff;
+    margin-left: 30px;
+  }
+  
+  .header-detail {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  .header-detail .h-active {
+    background-color: #04AA6D;
+  }
+
+  .tArea {
+    padding: 15px;
+  }
+  .header-detail a {
+    display: block;
+    width: 200px;
+    height: 50px;
+    background-color: #fff;
+    color: #5c5b5b;
+    text-align: center;
+    text-decoration: none;
+    padding-top: 15px;
+  }
+
+  .header-detail a:hover {
+    background-color: #ddd;
   }
 
   .detailExam {
@@ -68,11 +100,37 @@ body {
     background-color: #ffffff;
     flex-grow: 1;
     width: 100%;
-    height: 200px;
-    min-height: 300px;
     max-width: 500px;
     border-radius: 30px;
     box-shadow: 0px 0px 17px 2px rgba(255, 255, 255, 0.8);
+  }
+
+  .data-test {
+    display: flex;
+    width: 100%;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s;
+  }
+
+  .data-test img {
+    width: 900px;
+    align-self: stretch;
+  }
+
+  .data-test textarea {
+    width: 700px;
+    align-self: stretch;
+    overflow-y: auto;
+  }
+
+  .data-test.show {
+      visibility: visible;
+      opacity: 1;
+  }
+
+  .admin-container {
+    margin-top: 15px;
   }
 
   .detail-user-head label {
@@ -94,7 +152,187 @@ body {
   .creatExam {
     display: flex;
   }
+  
+  .btnTest {
+    margin-top: 10px;
+    height: 50px;
+    border: 0px solid #fff;
+    padding: 1em 2em;
+    min-width: 200px;
+    min-height: 50px;
+    background-color: #04b7e9;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset -2px 1px 11px rgba(0,0,0,0.5);
+}
 
+.btnTest a {
+    color: #fff;
+    text-decoration: none;
+    font-size: large;
+    text-transform: uppercase;
+}
+
+.btnTest svg {
+    position: absolute;
+    inset: 0;
+    fill: none;
+    stroke: #fff;
+    stroke-width: 5px;
+    stroke-dasharray: 33 297;
+    stroke-dashoffset: 50;
+    transition: all 0.5s linear;
+}
+
+.btnTest:hover {
+    background-color: #04b7e9;
+    box-shadow: none;
+}
+
+.btnTest:hover svg {
+    stroke-width: 3px;
+    stroke-dashoffset: -500;
+}
+
+.btnTest:active {
+    transform: scale(1.001);
+    background-color: #02a7d4;
+}
+
+.imgTest {
+  max-width: 100%;
+  height: auto;
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+}
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #e2eef1;
+  width: 500px;
+  margin-top: 100px;
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 30px;
+}
+
+.profile-container #fullname {
+  font-size: 32px;
+  border: 0px;
+  border-radius: 20px;
+  padding-left: 20px;
+}
+
+.profile-container #password {
+  border: 0;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.profile-container h2 {
+  margin-left: 0px;
+  color: #000;
+}
+
+.profile-container #change {
+  margin-left: 10px;
+  border: 0;
+  background-color: #02a7d4;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.profile-container #change:hover {
+  background-color: #2cb8df;
+}
+
+.profile-container #update {
+  margin-top: 20px;
+  font-size: 20px;
+  width: 120px;
+  border: 0;
+  border-radius: 10px;
+  background-color: #02a7d4;
+  color: #fff;
+  margin-left: 50%;
+  transform: translate(-50%, 0%)
+}
+
+.profile-container #update:hover {
+  background-color: #2cb8df;
+}
+
+.new-lecturer button {
+  background-color: #02a7d4;
+  font-size: 20px;
+  border: 0;
+  margin: 15px;
+  color: #fff;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+}
+
+.new-lecturer button:hover {
+  background-color: #2cb8df;
+}
+
+.new-lecturer-container {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  background-color: #fff;
+  padding: 20px;
+  margin-left: 50%;
+  margin-top: 100px;
+  transform: translate(-50%, 0%);
+  box-shadow: #2cb8df 0px 0px 0px 2px;
+}
+
+.new-lecturer-container h3 {
+  color: #000;
+}
+
+.new-lecturer-container input {
+  border: 0px;
+  background-color: #ebf0f1;
+  font-size: 20px;
+  padding-left: 10px;
+  border-radius: 10px;
+}
+
+.new-lecturer-container label {
+  margin-left: 7px;
+}
+
+.new-lecturer-container button {
+  border: 0;
+  background-color: #02a7d4;
+  font-size: 20px;
+  color: #fff;
+  width: 180px;
+  border-radius: 10px;
+}
+
+.new-lecturer-container button:hover {
+  background-color: #2cb8df;
+}
+
+.action {
+  display: flex;
+  margin-top: 15px;
+  margin-left: 50%;
+  transform: translate(-50%, 0%);
+  justify-content: space-between;
+  padding-right: 10px;
+}
+  
  
 
 

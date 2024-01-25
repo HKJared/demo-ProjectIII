@@ -1,0 +1,102 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="shortcut icon" href="/image/logoWeb.png" type="image/png">
+
+
+</head>
+<style>
+    
+</style>
+<body>
+    <div class="topnav">
+        <a class="active" href="/">Home</a>
+         <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf">Logout</a>
+    </div>
+    <div class="w3-container">
+        <div class="admin-container">
+            <div class="header-detail">
+                <a href="/admin/classes">Class list</a>
+                <a id="lecturer" href="/admin/lecturers">Lecturers</a>
+                <a id="student" href="/admin/students">Students</a>
+            </div>
+        </div>
+        <div class="new-lecturer-container">
+            <h3>Profile user #<%= data.idUser %></h3>
+            <label for="fullname">Fullname</label>
+            <input type="text" id="fullname" value="<%= data.fullname %>">
+            <label for="account">Account</label>
+            <input type="text" id="account" value="<%= data.account %>">
+            <label for="password">Password</label>
+            <input type="text" id="password" value="<%= data.password %>">
+            <div class="action">
+                <button type="button" onclick="updateUser('<%= data.idUser %>')">Update</button>
+                <button type="button" onclick="deleteUser('<%= data.idUser %>')" style="margin-left: 10px;">Delete</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script>
+    var lecturer = document.getElementById("lecturer");
+    var student = document.getElementById("student");
+
+    if ('<%= data.role %>' === 'lecturer')  {
+        lecturer.classList.add("h-active");
+    } else {
+        student.classList.add("h-active");
+    }
+
+    var fullname = document.getElementById("fullname");
+    var account = document.getElementById("account");
+    var password = document.getElementById("password");
+
+    async function deleteUser(idUser){
+        if (confirm("Confirm delete " + "<%= data.role %>")) {
+            var response = await fetch("http://localhost:5000/admin/delete-user/" + idUser, {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            })
+            var result = await response.json();
+            alert(result);
+            window.location.reload(true)
+        }
+    }
+
+    async function updateUser(idUser){
+        if (!fullname.value || !account.value || !password.value) {
+            alert('Please fill in all information')
+        } else {
+            if (confirm("Confirm update user")) {
+                var response = await fetch("http://localhost:5000/admin/update-user/" + idUser, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type" : "application/json"
+                    },
+                    body: JSON.stringify({
+                        fullname: fullname.value,
+                        account: account.value,
+                        password: password.value
+                    })
+                })
+                var result = await response.json();
+                alert(result);
+                window.location.reload(true)
+            }
+        }
+    }
+
+</script>
+</html>

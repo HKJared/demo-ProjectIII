@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C/C++ for Students</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="shortcut icon" href="/image/logoWeb.png" type="image/png">
+
+
+</head>
+<style>
+    
+</style>
+<body>
+    <div class="topnav">
+        <a class="active" href="/">Home</a>
+        <a href="/lecturer/<%= idUser %>/profile">Profile</a>
+         <a href="/" onclick="let cf = confirm('Confirm Logout'); if (cf) localStorage.removeItem('jwt'); return cf">Logout</a>
+    </div>
+    <div class="w3-container">
+        <div>
+            <h1><%= detail.className %></h1>
+            <div class="header-detail">
+                <a href="/detail-class/<%= detail.idClass %>">Students</a>
+                <a href="/detail-class/<%= detail.idClass %>/exam">Exam</a>
+                <a class="h-active" href="/detail-class/<%= detail.idClass %>/test">Test</a>
+            </div>
+            <div style="padding: 15px; color:aliceblue">
+                <form action="/create-test" method="post" id="formCreateTest" >
+                    <input type="text" hidden value="<%= detail.idClass %>" name="idClass"/>
+                    <button type="button" id="btn-save" width="30px" height="20px">Save</button>
+                    <label for="" style="color: aliceblue; margin-left: 300px;">Name of Test (*)</label>
+                    <input style="width: 500px;" type="text" name="nameTest" id="nameTest">
+                    <label for="" style="color: aliceblue; margin-left: 100px;">Language allow: </label>
+                    <input style="margin-left: 20px;" type="checkbox" name="Cpp" value="Cpp">Cpp   
+                    <input style="margin-left: 20px;" type="checkbox" name="Java" value="Java">Java   
+                    <input style="margin-left: 20px;" type="checkbox" name="Python" value="Python">Python   
+                    <div class="test-image">
+                        <label for="">Descriptive image (*)</label>
+                        <input type="text" name="image" id="image">
+                        <button type="button" id="btn-view">View</button>
+                    </div>
+                    <div class="test-time">
+                        <label for="">Time Range (*)</label>
+                        <input type="text" name="startTime" id="startTime" placeholder="YYYY-MM-DD HH:mm:ss"> - <input type="text" name="endTime" id="endTime" placeholder="YYYY-MM-DD HH:mm:ss">
+                        <label for="" style="margin-left: 200px;">Duration (minutes) (*)</label>
+                        <input type="text" name="duration" id="duration">
+                    </div>
+                    <div class="creatExam" style="padding-top: 15px">
+                        <textarea name="detail" id="detail" class="tArea" cols="150" rows="25" placeholder="(*)"></textarea>
+                        <table class="w3-table-all w3-hoverable" width="50">
+                            <thead class="table-primary">
+                            <tr class="w3-light-grey">
+                                <th width="50px">Input</th>
+                                <th width="50px">Outout</th>                    
+                            </tr>
+                            </thead>
+                            <tbody class="table-warning" id="myTable">
+                                <tr>
+                                    <td>
+                                        <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <input type="text" name="input"/>
+                                    </td>
+                                    <td>
+                                    <input type="text" name="output"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var nameTest = document.getElementById('nameTest');
+    var image = document.getElementById('image');
+    var startTime = document.getElementById('startTime');
+    var endTime = document.getElementById('endTime');
+    var duration = document.getElementById('duration');
+    var detail = document.getElementById('detail');
+
+    function checkInputs() {
+        var inputs = document.querySelectorAll('#myTable input[name="input"]');
+        var atLeastOneInputFilled = false;
+    
+        inputs.forEach(function(input) {
+            if (input.value.trim() !== '') {
+                atLeastOneInputFilled = true;
+            }
+        });
+    
+        return atLeastOneInputFilled;
+    }
+
+    document.getElementById('btn-save').addEventListener('click', async function (){
+        if (nameTest.value === undefined || image.value === undefined || startTime.value === undefined || endTime.value === undefined || duration.value === undefined || detail.value === undefined) {
+            console.log(nameTest.value)
+            alert('Fill in all the fields marked with (*)')
+        } else {
+            var regex = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+            if (!regex.test(startTime.value) || !regex.test(endTime.value)) {
+                alert("Incorrect format. Please enter a valid date and time in the format YYYY-MM-DD HH:mm:ss.")
+            } else {
+                if (checkInputs()) {
+                    if (confirm('Are you sure you want to save this exam?')) {
+                        document.getElementById('formCreateTest').submit();
+                    }
+                } else {
+                    alert('There must be at least one input-output pair')
+                }
+            }
+        }
+    })
+</script>
+</html>
